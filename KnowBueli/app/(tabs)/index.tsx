@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Platform, Button, Pressable, Alert } from 'react-native';
+import { StyleSheet, Pressable, FlatList, View, Text, Vibration } from 'react-native';
 import { useRouter } from 'expo-router';
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { View, Text, FlatList } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -42,10 +37,15 @@ export default function HomeScreen() {
     router.push('/add');
   };
 
+  const handleItemPress = (id) => {
+    Vibration.vibrate(100); // Vibrate for 100 milliseconds
+    router.push(`/person/${id}`);
+  };
+
   const renderItem = ({ item }) => (
-    <View style={styles.item}>
+    <Pressable onPress={() => handleItemPress(item._id)} style={styles.item}>
       <Text>{item.name} {item.surname}</Text>
-    </View>
+    </Pressable>
   );
 
   return (
@@ -55,7 +55,7 @@ export default function HomeScreen() {
       <FlatList
         data={students}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item._id}
       />
       <Pressable style={styles.button} onPress={handlePress}>
         <Text style={styles.buttonText}>Person hinzufügen</Text>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
+    marginBottom: 60
   },
   buttonText: {
     color: 'white',

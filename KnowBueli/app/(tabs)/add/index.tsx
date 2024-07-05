@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Alert, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const Add = () => {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [average, setAverage] = useState('');
-  const [room, setRoom] = useState('')
+  const [room, setRoom] = useState('');
 
   const addStudent = () => {
     const data = JSON.stringify({
@@ -35,7 +37,7 @@ const Add = () => {
       .then(response => response.json())
       .then(data => {
         console.log(JSON.stringify(data));
-        Alert.alert('Erfolg', 'Schüler erfolgreich hinzugefügt');
+        Alert.alert('Schüler hinzugefügt', 'Drücke auf das Logo um zurückzukehren');
         setName('');
         setSurname('');
         setBirthdate('');
@@ -48,8 +50,15 @@ const Add = () => {
       });
   };
 
+  const handleTitlePress = () => {
+    router.push('/');
+  };
+
   return (
     <View style={styles.body}>
+      <Pressable onPress={handleTitlePress}>
+        <Text style={styles.maintitle}>KNOWBÜELI</Text>
+      </Pressable>
       <TextInput
         style={styles.input}
         placeholder='Name'
@@ -100,6 +109,11 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     backgroundColor: 'white'
+  },
+  maintitle: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 16,
   }
 });
 
